@@ -43,9 +43,15 @@ fn main() {
         .get_matches();
 
     let file_path = matches.get_one::<String>("file").unwrap();
+    let flags = vec!["bytes", "lines", "words", "chars", "max-line-count"];
+    let mut order_66 = false;
 
-    for flag in vec!["bytes", "lines", "words", "chars", "max-line-count"] {
-        if matches.get_flag(flag) {
+    if !flags.iter().any(|&flag| matches.get_flag(flag)) {
+        order_66 = true;
+    }
+
+    for flag in flags {
+        if matches.get_flag(flag) || order_66 {
             let operation_result = match flag {
                 "bytes" => calculate_file_size(file_path),
                 "lines" => calculate_file_line_count(file_path),
